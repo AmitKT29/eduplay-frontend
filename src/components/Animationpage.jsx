@@ -19,6 +19,7 @@ export default function AnimationPage() {
   // Preload Media
   useEffect(() => {
     const preloadMedia = async () => {
+      
         try {
             // Fetch and load animation
             const response = await fetch('https://my-animations-bucket.s3.eu-north-1.amazonaws.com/animations/1.json');
