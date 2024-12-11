@@ -1,0 +1,194 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('/public/6516135.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.container {
+  display: flex;
+  width: 900px;
+  height: 500px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+/* Left Section */
+.welcome-section {
+  width: 50%;
+  background-image: url('/public/output-onlinegiftools.gif'); /* Add your background image here */
+  background-size: cover;
+  background-position: center;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0px 0px 2px rgba(0,0,0,0.3);
+}
+
+
+.welcome-section .illustration img {
+  width: 300px; /* Adjust according to the image size */
+  margin-bottom: 30px;
+}
+
+.welcome-section h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.welcome-section p {
+  font-size: 16px;
+  color: #704c5d;
+}
+
+/* Right Section */
+.login-section {
+  width: 50%;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 350px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #5a2a4d;
+}
+
+p {
+  font-size: 14px;
+  color: #000000;
+}
+
+.google-login {
+  width: 100%;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 20px;
+  color: rgb(21, 25, 28);
+}
+.google-login:hover{
+  background-color: lightgreen;
+}
+
+.google-login img {
+  width: 20px;
+  margin-right: 10px;
+}
+
+.or-separator {
+  text-align: center;
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #704c5d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+form button:hover {
+  background-color: #5a2a4d;
+}
+
+.remember-forgot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 10px;
+}
+.remember-me {
+  display: flex;
+  align-items: center;
+}
+
+.remember-me input {
+  margin-right: 5px;
+}
+
+.register {
+  text-align: center;
+  font-size: 14px;
+}
+
+.register a {
+  color: #5a2a4d;
+  text-decoration: none;
+}
+
+.register a:hover {
+  text-decoration: underline;
+}
+.fade{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height:100vh;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fade .box{
+  width: 80px;
+  height:80px;
+  background: white;
+  border: 7px solid silver;
+  border-top: 7px solid blueviolet;
+  border-radius: 50%;
+  transition: all ease-in 0.4s;
+  animation: spin linear infinite 1s;
+}
+@keyframes spin {
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform:rotate(359deg);
+  }
+}

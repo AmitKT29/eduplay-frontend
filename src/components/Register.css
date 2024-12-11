@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('/public/6758420.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #333;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.register-container {
+    background: linear-gradient(145deg, #f1ead9, #ffebad); /* Gradient background */
+    border: 3px solid #080606; /* Beautiful border with color */
+    border-radius: 15px; /* Rounded corners */
+    width: 400px;
+    text-align: center;
+    padding: 10px 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Soft shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    padding-bottom: 25px;
+}
+
+h1 {
+    color: #050505;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #000000;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-align: left;
+    margin-left: 5%;
+}
+
+input, select {
+    width: 90%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus {
+    border-color: #4caf50;
+}
+
+button {
+    background: #7500ce;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #000000;
+}
+.fade{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height:100vh;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fade .box{
+    width: 80px;
+    height:80px;
+    background: white;
+    border: 7px solid silver;
+    border-top: 7px solid blueviolet;
+    border-radius: 50%;
+    transition: all ease-in 0.4s;
+    animation: spin linear infinite 1s;
+  }
+  @keyframes spin {
+    0%{
+      transform: rotate(0deg);
+    }
+    100%{
+      transform:rotate(359deg);
+    }
+  }
