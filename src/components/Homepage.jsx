@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react";
 import "./Homepage.css";
 import { NavLink, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Homepage() {
   const scrollToTop = () => {
@@ -90,7 +92,39 @@ export default function Homepage() {
     handleMouseUp();
   }
 
+  const handleLogOut=()=>{
+    let user=localStorage.getItem("app-user")
+    if(user){
+      localStorage.removeItem("app-user")
+      toast.warning("Logged Out!!");
+    }else{
+      toast.error("No User Logged In");
+    }
+  }
+
+  const handleAlphabetCard=(e)=>{
+    const user=localStorage.getItem("app-user");
+    if(user){
+      navigate("/animation");
+    }else{
+      toast.error("Login to Play");
+    }
+  }
+
   return (
+    <>
+    <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
     <div className="container">
       <header>
         <div id="home" className="navbar">
@@ -104,7 +138,7 @@ export default function Homepage() {
             <a href="#pricing">Pricing</a>
             <a href="#Contact-Us">Contact us</a>
             <a href="#" className="enroll-btn"><NavLink to={"/register"}>Enroll Now</NavLink></a>
-            <button id="logout-button">Log Out</button>
+            <button id="logout-button" onClick={handleLogOut}>Log Out</button>
           </div>
         </div>
         <div className="login-container">
@@ -133,7 +167,7 @@ export default function Homepage() {
             <h3 className="card-title">Alphabet BINGO</h3>
             <p className="card-subtitle">Grades PRE-K – K</p>
           </div>
-          <div className="card">
+          <div className="card" onClick={handleAlphabetCard}>
             <img src="1234.gif" alt="Alphabetical Order" className="card-image" />
             <h3 className="card-title">Counting Crew</h3>
             <p className="card-subtitle">Grades PRE-K – 1</p>
@@ -229,5 +263,6 @@ export default function Homepage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

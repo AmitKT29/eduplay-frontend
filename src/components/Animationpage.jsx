@@ -1,225 +1,133 @@
-import React, { useState, useEffect, useRef } from 'react';
-import lottie from 'lottie-web';
+import React, { useEffect, useState, useRef } from "react";
+import lottie from "lottie-web";
+import { useNavigate } from "react-router-dom"; // To handle page navigation
+import "./Animationpage.css";
 
-export default function AnimationPage() {
-  // State Management
-  const [isAnimationPlaying, setIsAnimationPlaying] = useState(false);
-  const [feedbackMessage, setFeedbackMessage] = useState('');
-  const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
-  const [isRecognizing, setIsRecognizing] = useState(false);
-  const [resultReceived, setResultReceived] = useState(false);
-  const [audioLoaded, setAudioLoaded] = useState(false);
-  const [currentFrame, setCurrentFrame] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-
-  // References
-  const animationRef = useRef(null);
+export default function AnimationPage(){
+  const animationContainerRef = useRef(null);
   const audioRef = useRef(null);
+  const [animation, setAnimation] = useState(null);
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const navigate = useNavigate(); // New version
+  // Hook to navigate to another page
 
-  // Preload Media
   useEffect(() => {
+    // Set body styles when the component is mounted
+    document.body.style.fontFamily = "Arial, sans-serif";
+    document.body.style.display = "flex";
+    document.body.style.flexDirection = "column";
+    document.body.style.alignItems = "center";
+    document.body.style.justifyContent = "center";
+    document.body.style.height = "100vh";
+    document.body.style.margin = "0";
+    document.body.style.backgroundImage="url(/6758420.jpg)";
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
+    document.body.style.backgroundRepeat = "no-repeat";
+
+    // Cleanup: Reset styles when the component is unmounted
+    return () => {
+      document.body.style = ""; // Reset all body styles
+    };
+  }, []);
+  useEffect(() => {
+    let loadedAnimation;
+
     const preloadMedia = async () => {
-      
-        try {
-            // Fetch and load animation
-            const response = await fetch('https://my-animations-bucket.s3.eu-north-1.amazonaws.com/animations/1.json');
-            const animationData = await response.json();
-
-            if (animationRef.current) {
-                const animInstance = lottie.loadAnimation({
-                    container: animationRef.current,
-                    renderer: 'svg',
-                    loop: false,
-                    autoplay: false,
-                    animationData,
-                });
-
-                animInstance.addEventListener('enterFrame', (event) => {
-                    if (event.currentTime >= 385 && !isRecognizing && !resultReceived) {
-                        stopAnimationAndAudio();
-                    }
-                });
-
-                animInstance.addEventListener('error', (err) => {
-                    console.error('Lottie animation error:', err);
-                });
-            }
-
-            // Preload audio
-            if (audioRef.current) {
-                audioRef.current.src = 'https://my-animations-bucket.s3.eu-north-1.amazonaws.com/audios/1.mp3';
-                audioRef.current.load();
-
-                audioRef.current.addEventListener('canplaythrough', () => {
-                    setAudioLoaded(true);
-                });
-
-                audioRef.current.addEventListener('error', () => {
-                    console.error('Error loading audio');
-                });
-            }
-        } catch (err) {
-            console.error('Error preloading media:', err);
+      try {
+        // Fetch the animation JSON
+        const animationResponse = await fetch(
+          "https://my-animations-bucket.s3.eu-north-1.amazonaws.com/animations/1.json"
+        );
+        if (!animationResponse.ok) {
+          throw new Error(
+            `Failed to fetch animation JSON. Status: ${animationResponse.status}`
+          );
         }
+        const animationData = await animationResponse.json();
+
+        // Clear the container before loading a new animation
+        if (animationContainerRef.current) {
+          animationContainerRef.current.innerHTML = ""; // Clear any existing animations
+        }
+
+        // Load the new animation
+        loadedAnimation = lottie.loadAnimation({
+          container: animationContainerRef.current,
+          renderer: "svg",
+          loop: false,
+          autoplay: false,
+          animationData,
+        });
+
+        // Add event listener for when animation finishes
+        loadedAnimation.addEventListener("complete", () => {
+          setIsAnimationComplete(true);
+        });
+
+        // Save the animation instance in state
+        setAnimation(loadedAnimation);
+
+        // Set the audio source
+        audioRef.current.src =
+          "https://my-animations-bucket.s3.eu-north-1.amazonaws.com/audios/1.mp3";
+      } catch (error) {
+        console.error("Error loading media:", error);
+      }
     };
 
     preloadMedia();
-}, []);
-
-
-  // Start Animation
-  const handleStartButtonClick = () => {
-    setIsAnimationPlaying(true);
-  };
-
-  // Handle Feedback
-  const handleFeedbackClose = () => {
-    setIsFeedbackVisible(false);
-    setResultReceived(false);
-    setTimeout(() => {
-      goToAndPlay(currentFrame, currentTime);
-    }, 300);
-  };
-
-  // Speech Recognition Result
-  const handleSpeechRecognitionResult = (isCorrect) => {
-    if (isCorrect) {
-      setFeedbackMessage('Great job you got it right!!');
-    } else {
-      setFeedbackMessage("Oops! That's incorrect. Try again!");
-    }
-    setIsFeedbackVisible(true);
-    setResultReceived(true);
-  };
-
-  // Play Animation and Audio
-  const playAnimationAndAudio = () => {
-    if (audioRef.current) {
-      audioRef.current.play().catch((error) => console.error('Audio playback error:', error));
-    }
-    if (animationRef.current) {
-      animationRef.current.play();
-    }
-  };
-
-  // Stop Animation and Audio
-  const stopAnimationAndAudio = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-    if (animationRef.current) {
-      animationRef.current.pause();
-    }
-    if (animationRef.current) setCurrentFrame(animationRef.current.currentFrame);
-    if (audioRef.current) setCurrentTime(audioRef.current.currentTime);
-  };
-
-  // Go To and Play Specific Frame
-  const goToAndPlay = (targetFrame, audioTime) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = audioTime;
-      audioRef.current.play().catch((error) => console.error('Audio playback error:', error));
-    }
-    if (animationRef.current) {
-      animationRef.current.goToAndPlay(targetFrame, true);
-    }
-  };
-
-  // Speech Recognition Logic
-  useEffect(() => {
-    let recognition;
-    if (window.SpeechRecognition || window.webkitSpeechRecognition) {
-      recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      recognition.interimResults = false;
-
-      recognition.addEventListener('error', (event) => {
-        console.error('Speech recognition error:', event.error);
-        if (event.error === 'network') {
-          alert('Speech recognition failed due to network issues. Please check your connection.');
-        }
-        setIsRecognizing(false);
-      });
-
-      recognition.addEventListener('result', (event) => {
-        let finalText = '';
-        Array.from(event.results).forEach((result) => {
-          if (result.isFinal) {
-            finalText = result[0].transcript.toLowerCase().trim();
-            if (finalText === 'five children' || finalText === 'one') {
-              handleSpeechRecognitionResult(true);
-            } else {
-              handleSpeechRecognitionResult(false);
-            }
-          }
-        });
-      });
-
-      recognition.addEventListener('end', () => {
-        setIsRecognizing(false);
-      });
-
-      if (isRecognizing) {
-        recognition.start();
-      } else {
-        recognition.stop();
-      }
-    } else {
-      console.warn('Speech recognition is not supported in this browser.');
-    }
 
     return () => {
-      if (recognition) recognition.stop();
+      // Cleanup animation instance
+      if (loadedAnimation) {
+        loadedAnimation.destroy();
+      }
     };
-  }, [isRecognizing]);
+  }, []);
+
+  const playAnimationAndAudio = () => {
+    try {
+      audioRef.current.currentTime = 0; // Ensure the audio starts from the beginning
+      animation.goToAndStop(0, true); // Reset animation to the start
+      audioRef.current
+        .play()
+        .then(() => {
+          animation.play(); // Start the animation immediately after the audio starts
+        })
+        .catch((error) => {
+          console.error("Error starting audio:", error);
+        });
+    } catch (error) {
+      console.error("Error playing audio or animation:", error);
+    }
+  };
+
+  const handleStartClick = () => {
+    playAnimationAndAudio();
+  };
+
+  // Redirect to another page after animation and audio complete
+  useEffect(() => {
+    if (isAnimationComplete) {
+      // Wait for a brief moment after animation completion to ensure smooth transition
+      setTimeout(() => {
+        navigate("/games"); // Redirect to another page
+      }, 500); // Adjust timing if needed
+    }
+  }, [isAnimationComplete, navigate]);
 
   return (
-    <div className="AnimationPage">
-      {/* Start Button */}
-      {!isAnimationPlaying && (
-        <button onClick={handleStartButtonClick}>Start</button>
-      )}
-
-      {/* Animation Container */}
-      <div
-        id="quiz-container"
-        className={`quiz-container ${isAnimationPlaying ? '' : 'blurred'}`}
-      >
-        {isAnimationPlaying && <div id="animation-container" />}
+    <div className="App">
+      <div id="quiz-container">
+        <div id="animation-container" ref={animationContainerRef}></div>
+        <audio id="animation-audio" ref={audioRef} preload="auto"></audio>
       </div>
 
-      {/* Speech Recognition Button */}
-      {isAnimationPlaying && (
-        <button
-          id="pushToTalkButton"
-          onClick={() => setIsRecognizing(true)}
-          style={{ display: 'block' }}
-          aria-label="Activate Speech Recognition"
-        >
-          Push to Talk
-        </button>
-      )}
-
-      {/* Feedback Message */}
-      {isFeedbackVisible && (
-        <div id="feedback">
-          <p id="feedback-message">{feedbackMessage}</p>
-          <button id="ok" onClick={handleFeedbackClose}>
-            OK
-          </button>
-        </div>
-      )}
-
-      {/* Audio Element */}
-      {isAnimationPlaying && audioLoaded && (
-        <div>
-          <audio
-            ref={audioRef}
-            preload="auto"
-            onPlay={playAnimationAndAudio}
-            onPause={stopAnimationAndAudio}
-          />
-        </div>
-      )}
+      <button id="start-button" onClick={handleStartClick}>
+        Start
+      </button>
     </div>
   );
-}
+};
+

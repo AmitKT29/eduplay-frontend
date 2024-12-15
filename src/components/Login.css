@@ -11,6 +11,7 @@
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
   }
   
   /* Left Section */
@@ -84,6 +85,7 @@
   }
   .login-google-button:hover{
     background-color: lightgreen;
+    color: rgb(21, 25, 28);
   }
   
   .login-google-button img {

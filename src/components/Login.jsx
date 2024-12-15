@@ -5,28 +5,34 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
-    useEffect(() => {
-      // Set body styles when the component is mounted
-      document.body.style.display = 'flex';
-      document.body.style.justifyContent = 'center';
-      document.body.style.alignItems = 'center';
-      document.body.style.height = '100vh';
-      document.body.style.backgroundImage = 'url(/6516135.jpg)';
-      document.body.style.backgroundPosition = 'center';
-      document.body.style.backgroundRepeat = 'no-repeat';
-      document.body.style.backgroundSize = 'cover';
-  
-      // Cleanup: Reset styles when the component is unmounted
-      return () => {
-        document.body.style = '';  // Reset all body styles
-      };
-    }, []);
+  useEffect(() => {
+    // Set body styles when the component is mounted
+    document.body.style.display = "flex";
+    document.body.style.justifyContent = "center";
+    document.body.style.alignItems = "center";
+    document.body.style.height = "100vh";
+    document.body.style.backgroundImage = "url(/6516135.jpg)";
+    document.body.style.backgroundPosition = "center";
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundSize = "cover";
+
+    // Cleanup: Reset styles when the component is unmounted
+    return () => {
+      document.body.style = ""; // Reset all body styles
+    };
+  }, []);
+
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
   });
+
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
+  };
 
   const handleChange = (e) => {
     setLoginForm({
@@ -36,8 +42,17 @@ export default function Login() {
   };
 
   useEffect(() => {
+    const savedEmail = localStorage.getItem("saved-email");
+    const savedPassword = localStorage.getItem("saved-password");
+    if (savedEmail) {
+      setLoginForm({
+        email: savedEmail,
+        password: savedPassword || "",
+      });
+      setRememberMe(true); // Check the "Remember Me" checkbox by default
+    }
+
     let user = localStorage.getItem("app-user");
-    console.log(user);
     if (user) {
       navigate("/");
     }
@@ -45,10 +60,20 @@ export default function Login() {
 
   const onUserLogin = (e) => {
     e.preventDefault();
+
+    if (rememberMe) {
+      localStorage.setItem("saved-email", loginForm.email);
+      localStorage.setItem("saved-password", loginForm.password);
+    } else {
+      localStorage.removeItem("saved-email");
+      localStorage.removeItem("saved-password");
+    }
+
     if (loginForm.email === "" || loginForm.password === "") {
       toast.error("Enter Credentials !!");
       return;
     }
+
     setLoading(true);
     setTimeout(async () => {
       const res = await fetch("http://localhost:8080/login", {
@@ -59,7 +84,6 @@ export default function Login() {
         body: JSON.stringify(loginForm),
       });
       const data = await res.json();
-      console.log(data);
       setLoading(false);
       if (data.status === true) {
         toast.success(data.message);
@@ -99,7 +123,7 @@ export default function Login() {
         theme="colored"
       />
       {loading && (
-        <div className="fade">
+        <div className="fade" style={{ zIndex: 5 }}>
           <div className="box"></div>
         </div>
       )}
@@ -146,7 +170,12 @@ export default function Login() {
               />
               <div className="login-remember-forgot">
                 <label className="login-remember-me">
-                  <input type="checkbox" /> Remember Me
+                  <input
+                    type="checkbox"
+                    checked={rememberMe} // Bind checkbox to state
+                    onChange={handleRememberMeChange}
+                  />
+                  Remember Me
                 </label>
                 <a href="#">
                   <NavLink to={"/Forgot"}>Forgot Password?</NavLink>

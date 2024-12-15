@@ -6,6 +6,7 @@ import Forgot from './components/Forgot';
 import Login  from './components/Login';
 import Register from './components/Register';
 import AnimationPage from './components/Animationpage';
+import Games from './components/Games';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
          <Route path='/forgot' Component={Forgot}/>
          <Route path='/login' Component={Login}/>
          <Route path='/animation' Component={AnimationPage}/>
+         <Route path='/games' Component={Games}/>
       </Routes>
     </BrowserRouter>
     </>
