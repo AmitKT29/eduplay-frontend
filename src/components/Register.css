@@ -1,21 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-body {
-    font-family: Arial, sans-serif;
-    background-image: url('/public/6758420.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    color: #333;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
 
-.register-container {
+.register-page-container {
     background: linear-gradient(145deg, #f1ead9, #ffebad); /* Gradient background */
     border: 3px solid #080606; /* Beautiful border with color */
     border-radius: 15px; /* Rounded corners */
@@ -38,7 +24,7 @@ p {
     margin-bottom: 1rem;
 }
 
-.form-group {
+.register-form-group {
     margin-bottom: 1.5rem;
     text-align: center;
 }

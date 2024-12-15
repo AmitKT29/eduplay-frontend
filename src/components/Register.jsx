@@ -1,10 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Register.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  useEffect(() => {
+    // Set body styles when the component is mounted
+    document.body.style.fontFamily = 'Arial, sans-serif';
+    document.body.style.backgroundImage = 'url(/6758420.jpg)'; // Correct path
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.color = '#333';
+    document.body.style.padding = '20px';
+    document.body.style.display = 'flex';
+    document.body.style.justifyContent = 'center';
+    document.body.style.alignItems = 'center';
+    document.body.style.height = '100vh';
+    document.body.style.margin = '0';
+
+    // Cleanup: Reset styles when the component is unmounted
+    return () => {
+      document.body.style = '';  // Reset all body styles
+    };
+  }, []);
 
   const [loading,setLoading]=useState(false);
   const navigate=useNavigate();
@@ -84,11 +104,11 @@ export default function Register() {
         </div>
       )}
       <main>
-        <div className="register-container">
+        <div className="register-page-container">
           <h1>Welcome to EduPlay</h1>
           <p>Join us and make learning fun!</p>
-          <form id="register-form" onSubmit={onRegister}>
-            <div className="form-group">
+          <form id="register-page-form" onSubmit={onRegister}>
+            <div className="register-form-group">
               <label htmlFor="name">Full Name</label>
               <input
                 type="text"
@@ -99,7 +119,7 @@ export default function Register() {
                 value={registerForm.fullname}
               />
             </div>
-            <div className="form-group">
+            <div className="register-form-group">
               <label htmlFor="email">Email Address</label>
               <input
                 type="email"
@@ -110,7 +130,7 @@ export default function Register() {
                 value={registerForm.email}
               />
             </div>
-            <div className="form-group">
+            <div className="register-form-group">
               <label htmlFor="password">Password</label>
               <input
                 type="password"
@@ -121,7 +141,7 @@ export default function Register() {
                 value={registerForm.password}
               />
             </div>
-            <div className="form-group">
+            <div className="register-form-group">
               <label htmlFor="confirm-password">Confirm Password</label>
               <input
                 type="password"
@@ -132,7 +152,7 @@ export default function Register() {
                 value={registerForm.confirmPassword}
               />
             </div>
-            <div className="form-group">
+            <div className="register-form-group">
               <label htmlFor="subjects">Favorite Subject</label>
               <select id="subjects" name="favSubject" onChange={(e)=>handleChange(e)} value={registerForm.favSubject}>
                 <option value="math">Math</option>
