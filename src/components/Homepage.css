@@ -44,7 +44,7 @@ body {
   background-color:#ff6f61;
   color: white;
   border-radius: 5px;
-  cursor: pointer;
+  cursor: grab;
   user-select: none;
   position: absolute;
   left: 10px;
@@ -150,11 +150,10 @@ body {
   transform: scale(1.1);
   box-shadow: 0px 8px 15px rgba(255, 0, 0, 0.3);
 }
-.container{
+/*.container{
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
-  
-}
+}*/
 section {
   scroll-snap-align: start;
   height: 100vh; /* Each section takes the full viewport height */

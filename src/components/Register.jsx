@@ -29,7 +29,7 @@ export default function Register() {
   const [loading,setLoading]=useState(false);
   const navigate=useNavigate();
   const[registerForm,setRegisterForm] = useState({
-      fullname:'' , email:'' , password:'', confirmPassword:'' , favSubject:''
+      fullname:'' , email:'' , password:'', confirmPassword:''
   })
 
   const handleChange = (e) =>{
@@ -42,7 +42,7 @@ export default function Register() {
   const onRegister=async(e)=>{
     e.preventDefault();
     if(registerForm.fullname===''||registerForm.email===''||registerForm.password===''
-      ||registerForm.confirmPassword===''||registerForm.favSubject===''){
+      ||registerForm.confirmPassword===''){
 
         toast.error("Enter your details!!");
         return;
@@ -58,28 +58,32 @@ export default function Register() {
       }
       setLoading(true)
       setTimeout(async() => {
-          const res = await fetch('http://localhost:8080/register',{
+          const res = await fetch('http://localhost:5000/api/auth/register',{
             method:'POST',
             headers:{
               'Content-Type':'application/json'
             },
-            body:JSON.stringify(registerForm)
+            body:JSON.stringify({
+              name: registerForm.fullname,
+              email: registerForm.email,
+              password: registerForm.password,
+            })
           })
           const data = await res.json()
           console.log(data)
           setLoading(false)
-          if(data.status===true){
-            toast.success('Registerd Successfully !!')
+          if(data.token){
+            toast.success('Registerd Successfully Please Login to Continue!!')
             setRegisterForm({
-                 fullname:'' , email:'' , password:'', confirmPassword:'' , favSubject:''
+                 fullname:'' , email:'' , password:'', confirmPassword:''
             })
             setTimeout(()=>{
-              navigate('/')
-            },2000)
+              navigate('/login')
+            },4000)
           }else{
             toast.error(data.message)
             setRegisterForm({
-               fullname:'' , email:'' , password:'', confirmPassword:'' , favSubject:''
+               fullname:'' , email:'' , password:'', confirmPassword:''
             })
           }
       }, 3000);
@@ -151,15 +155,6 @@ export default function Register() {
                 onChange={(e)=>handleChange(e)}
                 value={registerForm.confirmPassword}
               />
-            </div>
-            <div className="register-form-group">
-              <label htmlFor="subjects">Favorite Subject</label>
-              <select id="subjects" name="favSubject" onChange={(e)=>handleChange(e)} value={registerForm.favSubject}>
-                <option value="math">Math</option>
-                <option value="science">Science</option>
-                <option value="history">History</option>
-                <option value="arts">Arts</option>
-              </select>
             </div>
             <button type="submit" id="register-button" value="Register">
               Register

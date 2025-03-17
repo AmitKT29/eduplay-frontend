@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Login.css"; // Ensure your CSS is correctly imported
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -24,11 +24,13 @@ export default function Login() {
 
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
   });
+
 
   const handleRememberMeChange = (e) => {
     setRememberMe(e.target.checked);
@@ -41,32 +43,51 @@ export default function Login() {
     });
   };
 
+  const googleLogin = () => {
+    window.location.href = "http://localhost:5000/api/auth/google";
+  };
+  
+
   useEffect(() => {
-    const savedEmail = localStorage.getItem("saved-email");
-    const savedPassword = localStorage.getItem("saved-password");
-    if (savedEmail) {
-      setLoginForm({
-        email: savedEmail,
-        password: savedPassword || "",
-      });
-      setRememberMe(true); // Check the "Remember Me" checkbox by default
+    if (location.pathname !== "/login") {
+      return;
     }
 
-    let user = localStorage.getItem("app-user");
+    let user = localStorage.getItem("app-user-token");
     if (user) {
       navigate("/");
+      return;
     }
-  }, []);
+
+    // Extract token from URL
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    if (token) {
+      localStorage.setItem("app-user-token", token);
+      toast.success("Login successful");
+
+      // Remove token from URL after saving
+      window.history.replaceState(null, "", "/login");
+
+      navigate("/");
+    } else {
+      console.log("No token found");
+    }
+  }, [location.search]);
+  
+  
+  
 
   const onUserLogin = (e) => {
     e.preventDefault();
 
     if (rememberMe) {
       localStorage.setItem("saved-email", loginForm.email);
-      localStorage.setItem("saved-password", loginForm.password);
+      //localStorage.setItem("saved-password", loginForm.password);
     } else {
       localStorage.removeItem("saved-email");
-      localStorage.removeItem("saved-password");
+      //localStorage.removeItem("saved-password");
     }
 
     if (loginForm.email === "" || loginForm.password === "") {
@@ -76,19 +97,22 @@ export default function Login() {
 
     setLoading(true);
     setTimeout(async () => {
-      const res = await fetch("http://localhost:8080/login", {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(loginForm),
+        body: JSON.stringify({
+          email: loginForm.email,
+          password: loginForm.password
+        }),
       });
       const data = await res.json();
       setLoading(false);
-      if (data.status === true) {
+      if (data.token) {
         toast.success(data.message);
         setTimeout(() => {
-          localStorage.setItem("app-user", loginForm.email);
+          localStorage.setItem("app-user-token", data.token);
           navigate("/");
         }, 1500);
       } else {
@@ -105,8 +129,9 @@ export default function Login() {
           });
         }
       }
-    }, 2000);
+    }, 3000);
   };
+
 
   return (
     <>
@@ -141,7 +166,7 @@ export default function Login() {
             <br />
 
             {/* Google Login Button */}
-            <button className="login-google-button">
+            <button className="login-google-button" onClick={googleLogin}>
               <img
                 src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
                 alt="Google Icon"

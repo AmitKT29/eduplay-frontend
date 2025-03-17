@@ -1,0 +1,23 @@
+
+#animation-container {
+    width: 600px;
+    height: 400px;
+    background-color: #000000;
+   
+    margin-bottom: 20px;
+}
+#start-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#start-button:hover {
+    background-color: #45a049;
+}
+audio {
+    display: none; /* Hidden, audio is controlled automatically */
+}

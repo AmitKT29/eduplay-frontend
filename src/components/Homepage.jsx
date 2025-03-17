@@ -93,9 +93,9 @@ export default function Homepage() {
   }
 
   const handleLogOut=()=>{
-    let user=localStorage.getItem("app-user")
+    let user=localStorage.getItem("app-user-token")
     if(user){
-      localStorage.removeItem("app-user")
+      localStorage.removeItem("app-user-token")
       toast.warning("Logged Out!!");
     }else{
       toast.error("No User Logged In");
@@ -103,9 +103,9 @@ export default function Homepage() {
   }
 
   const handleAlphabetCard=(e)=>{
-    const user=localStorage.getItem("app-user");
+    const user=localStorage.getItem("app-user-token");
     if(user){
-      navigate("/animation");
+      navigate("/numbers");
     }else{
       toast.error("Login to Play");
     }
@@ -137,7 +137,6 @@ export default function Homepage() {
             <a href="#Programs">Programs</a>
             <a href="#pricing">Pricing</a>
             <a href="#Contact-Us">Contact us</a>
-            <a href="#" className="enroll-btn"><NavLink to={"/register"}>Enroll Now</NavLink></a>
             <button id="logout-button" onClick={handleLogOut}>Log Out</button>
           </div>
         </div>
