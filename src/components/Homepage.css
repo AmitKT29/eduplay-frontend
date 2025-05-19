@@ -134,7 +134,7 @@ body {
   transform: scale(1.05);
 }
 
-.enroll-btn , #logout-button{
+.enroll-btn , #logout-button ,#dashboard-button{
   background: #ff6f61;
   color: white;
   padding: 7px 12px;

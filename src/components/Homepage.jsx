@@ -110,7 +110,13 @@ export default function Homepage() {
       toast.error("Login to Play");
     }
   }
+ const handleDashboard=(e)=>{
+  navigate("/dashboard");
+ }
 
+ const handleTest=(e)=>{
+  navigate("/test");
+ }
   return (
     <>
     <ToastContainer
@@ -137,6 +143,7 @@ export default function Homepage() {
             <a href="#Programs">Programs</a>
             <a href="#pricing">Pricing</a>
             <a href="#Contact-Us">Contact us</a>
+            <button id="dashboard-button" onClick={handleDashboard}>Dashboard</button>
             <button id="logout-button" onClick={handleLogOut}>Log Out</button>
           </div>
         </div>
@@ -161,7 +168,7 @@ export default function Homepage() {
         <p>Children experience fun while you observe tangible learning outcomes.</p>
 
         <div className="card-container">
-          <div className="card">
+          <div className="card" onClick={handleTest}>
             <img src="abc.gif" alt="Alphabet Bingo" className="card-image" />
             <h3 className="card-title">Alphabet BINGO</h3>
             <p className="card-subtitle">Grades PRE-K – K</p>

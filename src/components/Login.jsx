@@ -203,7 +203,7 @@ export default function Login() {
                   Remember Me
                 </label>
                 <a href="#">
-                  <NavLink to={"/Forgot"}>Forgot Password?</NavLink>
+                  <NavLink to={"/forgot-password"}>Forgot Password?</NavLink>
                 </a>
               </div>
               <button type="submit" name="login_btn">
@@ -212,7 +212,7 @@ export default function Login() {
             </form>
 
             <p>
-              New user??<NavLink to={"/Register"}>Create an account</NavLink>
+              New user??<NavLink to={"/register"}>Create an account</NavLink>
             </p>
           </div>
         </div>
